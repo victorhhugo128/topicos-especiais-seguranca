@@ -59,10 +59,10 @@ def find_multiplicative_inverse(n1: int, modulus: int):  # algoritmo de euclides
 def find_prime(n_bits: int):    # não eficiente para números muito grandes
     while True:
         prime = True
-        rand = randint(1, 2**n_bits)
+        rand = randint(3, 2**n_bits)
         square_rt = floor(sqrt(rand))
         
-        for i in range(2, square_rt):
+        for i in range(2, square_rt + 1):
             if rand % i == 0:
                 prime = False
                 break
@@ -73,26 +73,26 @@ def find_prime(n_bits: int):    # não eficiente para números muito grandes
     
 
 def find_generator(modulus: int):
-    tentativas_geradores = set()
-    contador_numeros_grupo = set()
+    # tentativas_geradores = set()
+    # contador_numeros_grupo = set()
+    # tentativas_geradores = 0
     
+    soma_grupo = 0
+    for elemento in range(1, modulus):
+        soma_grupo += elemento
+        
+    soma_gerador = 0    
     while True:
         rand_n = randint(2, modulus)
-        
-        if rand_n not in tentativas_geradores:
-            for exponent in range(0, modulus - 1):
-                nova_geracao = exp_mod(rand_n, modulus, exponent)
-                if nova_geracao in contador_numeros_grupo:
-                    tentativas_geradores.add(rand_n)
-                    break
-                contador_numeros_grupo.add(nova_geracao)
-                if len(contador_numeros_grupo) == (modulus - 1):
-                    # print(f"len(contador_numeros_grupo) = {len(contador_numeros_grupo)}\n")
-                    return rand_n
-            contador_numeros_grupo = set()
+        for exponent in range(0, modulus - 1):
+            soma_gerador += exp_mod(rand_n, modulus, exponent)
+        if soma_grupo == soma_gerador:
+            return rand_n
+            
+        soma_gerador = 0   
             
 def find_multiplicative_inverse(number: int, modulus: int):
-    for n in range(2, modulus):
+    for n in range(1, modulus):
         if multiply_mod(number, n, modulus) == 1:
             return n        
     return None
